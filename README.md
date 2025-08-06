@@ -4,7 +4,7 @@ Rent A Car is a scalable vehicle rental system built with .NET, following Domain
 It supports managing vehicles, bookings, and users efficiently.
 
 ## Technologies
-- .NET 7  
+- .NET 9
 - C#  
 - REST API
 
