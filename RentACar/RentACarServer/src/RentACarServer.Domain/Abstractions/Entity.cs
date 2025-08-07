@@ -17,9 +17,9 @@ public abstract class Entity
     public DateTimeOffset? DeletedAt { get; private set; }
     public bool? IsDeleted { get; private set; }
 
-    public void SetStatus(bool IsActive)
+    public void SetStatus(bool isActive)
     {
-        IsActive = IsActive;
+        IsActive = isActive;
     }
     public void Delete()
     {
