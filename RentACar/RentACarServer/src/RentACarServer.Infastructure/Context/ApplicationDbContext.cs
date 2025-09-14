@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentACarServer.Domain.Abstractions;
 
 namespace RentACarServer.Infastructure.Context;
@@ -11,6 +12,22 @@ internal sealed class ApplicationDbContext:DbContext
     {
         
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyGlobalFilters();
+        base.OnModelCreating(modelBuilder);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<IdentityId>().HaveConversion<IdentityIdValueConverter>();
+        configurationBuilder.Properties<decimal>().HaveColumnType("decimal(18,2)");
+        configurationBuilder.Properties<string>().HaveColumnType("varchar(MAX)");
+        base.ConfigureConventions(configurationBuilder);
+    }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker.Entries<Entity>();
@@ -63,4 +80,9 @@ internal sealed class ApplicationDbContext:DbContext
 
         return base.SaveChangesAsync(cancellationToken);
     }
+    
+}
+internal sealed class IdentityIdValueConverter : ValueConverter<IdentityId,Guid>
+{
+    public IdentityIdValueConverter() : base(m=>m.Value,m => new IdentityId(m)){}
 }
