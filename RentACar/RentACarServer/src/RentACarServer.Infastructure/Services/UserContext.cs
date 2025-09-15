@@ -4,7 +4,7 @@ using RentACarServer.Application.Services;
 
 namespace RentACarServer.Infastructure.Services;
 
-internal sealed class UserContext(HttpContextAccessor accessor):IUserContext
+internal sealed class UserContext(IHttpContextAccessor accessor):IUserContext
 {
     public Guid GetUserId()
     {
